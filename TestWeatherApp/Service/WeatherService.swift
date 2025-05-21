@@ -2,7 +2,7 @@ import Foundation
 import Combine
 
 protocol NetworkServiceProtocol {
-    func request<T: Decodable>() -> AnyPublisher<T, NetworkError>
+    func request(latitude: Double?, longitude: Double?) -> AnyPublisher<Weather, NetworkError>
 }
 
 struct WeatherService: NetworkServiceProtocol {
@@ -14,8 +14,23 @@ struct WeatherService: NetworkServiceProtocol {
         self.decoder = decoder
     }
     
-    func request<T: Decodable>() -> AnyPublisher<T, NetworkError> {
-        guard let urlString = URL(string: "https://api.weatherapi.com/v1/forecast.json?key=fa8b3df74d4042b9aa7135114252304&q=LAT,LON&days=7") else {
+    func getWeatherURL(latitude: Double?, longitude: Double?) -> URL? {
+        let apiKey = "fa8b3df74d4042b9aa7135114252304"
+        let baseURL = "https://api.weatherapi.com/v1/forecast.json"
+
+        let urlString = "\(baseURL)?key=\(apiKey)&q=\(latitude ?? 55.7558),\(longitude ?? 37.6173)&days=7"
+
+        guard let encodedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encodedURLString) else {
+            print("Ошибка создания URL")
+            return nil
+        }
+        
+        return url
+    }
+    
+    func request(latitude: Double?, longitude: Double?) -> AnyPublisher<Weather, NetworkError> {
+        guard let urlString = getWeatherURL(latitude: latitude, longitude: longitude) else {
             return Fail(error: .invalidURL).eraseToAnyPublisher()
         }
         
@@ -34,7 +49,7 @@ struct WeatherService: NetworkServiceProtocol {
                 
                 return data
             }
-            .decode(type: T.self, decoder: decoder)
+            .decode(type: Weather.self, decoder: decoder)
             .mapError { error -> NetworkError in
                 switch error {
                 case is URLError:

@@ -65,18 +65,3 @@ extension Weather {
         }
     }
 }
-
-extension Weather {
-    static var mock: Weather {
-        Weather(location: Location(name: "Москва"),
-                current:
-                    Current(tempC: 24,
-                            condition: Condition(text: "Ясно")),
-                forecast: Forecast(forecastday: [Forecastday(date: String(describing: Date.now),
-                                                             day: Day(maxTempC: 20,
-                                                                      minTempC: 11),
-                                                             hours: [Hours(time: String(describing: Date.now),
-                                                                           tempC: 11,
-                                                                           condition: Condition(text: "Ясно"))])]))
-    }
-}

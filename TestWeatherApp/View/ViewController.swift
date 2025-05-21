@@ -8,6 +8,7 @@ class WeatherViewController: UIViewController {
     // MARK: - Основные элементы
     
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
+    private let statusLabel = UILabel()
     private let errorLabel = UILabel()
     private let retryButton = UIButton(type: .system)
     
@@ -48,11 +49,9 @@ class WeatherViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray.withAlphaComponent(0.5)
+        view.backgroundColor = .white
         setupUI()
-        //setupScrollViews()
         bindViewModel()
-        viewModel.fetchWeather()
     }
     
     private func bindViewModel() {
@@ -92,6 +91,8 @@ class WeatherViewController: UIViewController {
     // MARK: - UpdateUI
     
     private func updateUI(with weather: Weather) {
+        view.backgroundColor = .lightGray.withAlphaComponent(0.5)
+        statusLabel.isHidden = true
         setupScrollViews()
         
         updateMainLabels(with: weather)
@@ -105,6 +106,11 @@ class WeatherViewController: UIViewController {
         loadingIndicator.color = .black
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(loadingIndicator)
+        
+        statusLabel.textColor = .black
+        statusLabel.text = "Загружаем прогноз погоды.."
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(statusLabel)
         
         // Настройка errorLabel
         errorLabel.textAlignment = .center
@@ -124,6 +130,9 @@ class WeatherViewController: UIViewController {
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
+            statusLabel.topAnchor.constraint(equalTo: loadingIndicator.bottomAnchor, constant: 16),
+            statusLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
             errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
@@ -134,13 +143,12 @@ class WeatherViewController: UIViewController {
     
     private func updateMainLabels(with weather: Weather) {
         cityNameLabel.text = weather.location.name
-        currentTempLabel.text = String(weather.current.tempC)
+        currentTempLabel.text = String(Int(weather.current.tempC))
         shortDescWeather.text = weather.current.condition.text
-        maxAndMinimumTempValues.text = String("Макс.: \(weather.forecast.forecastday[0].day.maxTempC), мин.: \(weather.forecast.forecastday[0].day.minTempC)")
+        maxAndMinimumTempValues.text = String("Макс.: \(Int(weather.forecast.forecastday[0].day.maxTempC)), мин.: \(Int(weather.forecast.forecastday[0].day.minTempC))")
     }
     
-    
-    // MARK: - Настройка скроллов
+    // MARK: - Настройка скролла
     
     private func setupScrollViews() {
         let vStack = UIStackView(arrangedSubviews: [cityNameLabel,
@@ -160,7 +168,7 @@ class WeatherViewController: UIViewController {
         NSLayoutConstraint.activate([
             
             // Вертикальный стек
-            vStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
+            vStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             vStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         
             // Горизонтальный скролл
@@ -189,7 +197,7 @@ class WeatherViewController: UIViewController {
     private func createWeatherColumns(with weather: Weather) {
         var columns = [UIView]()
         
-        guard let hourSequence = generate24HourSequence(weather) else { return }
+        guard let hourSequence = viewModel.generate24HourSequence(weather) else { return }
 
         for (index, hour) in hourSequence.enumerated() {
 
@@ -253,76 +261,6 @@ class WeatherViewController: UIViewController {
         
         return column
     }
-
-    func generate24HourSequence(_ weather: Weather) -> [[String:Int]]? {
-        let now = Date()
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH"
-        
-        guard let currentHour = Int(dateFormatter.string(from: now).components(separatedBy: " ").last ?? "") else { return nil }
-        
-        guard let arrayOfDictionariesCurrentSequenceHourTemp = generateDaySequenceHourTemp(with: weather, currentHour, 0),
-              let arrayOfDictionariesNextDaySequenceHourTemp = generateDaySequenceHourTemp(with: weather, currentHour, 1) else { return nil }
-        
-        let transformedArrayCurrentSequenceHourTemp = transformArrayOfDictionaries(arrayOfDictionariesCurrentSequenceHourTemp)
-        let transformedArrayNextDaySequenceHourTemp = transformArrayOfDictionaries(arrayOfDictionariesNextDaySequenceHourTemp)
-        
-        let result = transformedArrayCurrentSequenceHourTemp + transformedArrayNextDaySequenceHourTemp
-        
-        return result
-    }
-    
-    func generateDaySequenceHourTemp(with weather: Weather, _ currentHour: Int, _ index: Int) -> [[Int:Int]]? {
-        let hourDataDictionaryArray = weather.forecast.forecastday[index].hours
-        
-        var dictHourTemp = [String:Double]()
-        
-        for hour in hourDataDictionaryArray {
-            dictHourTemp[hour.time] = hour.tempC
-        }
-        
-        let intDictHourTemp = Dictionary(
-            uniqueKeysWithValues: dictHourTemp.map {
-                (Int(($0
-                    .key
-                    .components(separatedBy: " ")
-                    .last ?? "")
-                    .prefix(2)),
-                 Int($0.value)) })
-
-        if index == 0 {
-            guard let currentTemp = intDictHourTemp[currentHour] else { return nil }
-            
-            var hour = currentHour
-            
-            var currentSequenceHourTemp = [hour : currentTemp]
-            
-            while hour + 1 < 24 {
-                hour += 1
-                currentSequenceHourTemp[hour] = intDictHourTemp[hour]
-            }
-            
-            return currentSequenceHourTemp.map { [$0.key: $0.value] }.sortedByKey()
-        }
-        
-        var nextDaySequenceHourTemp = [Int:Int]()
-
-        for num in 0...currentHour {
-            nextDaySequenceHourTemp[num] = intDictHourTemp[num]
-        }
-        
-        return nextDaySequenceHourTemp.map { [$0.key: $0.value] }.sortedByKey()
-    }
-    
-    func transformArrayOfDictionaries(_ array: [[Int: Int]]) -> [[String: Int]] {
-        return array.map { dict in
-            dict.reduce(into: [String: Int]()) { result, pair in
-                let (key, value) = pair
-                result[key < 10 ? "0\(key)" : "\(key)"] = value
-            }
-        }
-    }
     
     private func createLabel(text: String = "",
                              fontSize: CGFloat,
@@ -339,11 +277,7 @@ class WeatherViewController: UIViewController {
     }
     
     @objc private func retryTapped() {
-        viewModel.fetchWeather()
-    }
-    
-    private func showError(_ error: Error) {
-        print("Ошибка: \(error.localizedDescription)")
+        viewModel.startRequest()
     }
 }
 
@@ -363,11 +297,12 @@ extension WeatherViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configureCell(text: "Сегодня мин.: \(viewModel.weather!.forecast.forecastday[indexPath.row].day.minTempC), макс.: \(viewModel.weather!.forecast.forecastday[indexPath.row].day.maxTempC)")
+        cell.configureCell(text: "\(viewModel.getDayOfWeek(from: viewModel.weather!.forecast.forecastday[indexPath.row].date) ?? "") мин.: \(Int(viewModel.weather!.forecast.forecastday[indexPath.row].day.minTempC)), макс.: \(Int(viewModel.weather!.forecast.forecastday[indexPath.row].day.maxTempC))")
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
         return cell
     }
+    
 }
 
 // MARK: - UITableViewDelegate
@@ -376,9 +311,4 @@ extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-}
-
-#Preview {
-    let view = WeatherViewController()
-    return view
 }
