@@ -1,6 +1,5 @@
 import Combine
 import Foundation
-//import CoreLocation
 
 final class WeatherViewModel {
     @Published var isLoading = false

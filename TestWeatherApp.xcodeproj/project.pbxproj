@@ -74,7 +74,6 @@
 			children = (
 				65A2E1692DDE15310067B788 /* AppDelegate.swift */,
 				65A2E16B2DDE15370067B788 /* SceneDelegate.swift */,
-				652CB2F92DDE1B2900E72330 /* LocationManager.swift */,
 				65A2E17F2DDE159E0067B788 /* Model */,
 				65A2E1802DDE15AB0067B788 /* View */,
 				65A2E1852DDE17050067B788 /* ViewModel */,
@@ -135,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				65A2E1752DDE15570067B788 /* WeatherService.swift */,
+				652CB2F92DDE1B2900E72330 /* LocationManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";

@@ -6,8 +6,7 @@ final class WeatherForecastCell: UITableViewCell {
     @Autolayout private var label: UILabel = {
         $0.font = UIFont.systemFont(ofSize: 22, weight: .medium)
         $0.textAlignment = .left
-        $0.textColor = .black
-        $0.text = "Test"
+        $0.textColor = .white
         return $0
     }(UILabel())
     
@@ -21,7 +20,7 @@ final class WeatherForecastCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
     
@@ -32,9 +31,4 @@ final class WeatherForecastCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-#Preview {
-    let view = WeatherForecastCell()
-    return view
 }

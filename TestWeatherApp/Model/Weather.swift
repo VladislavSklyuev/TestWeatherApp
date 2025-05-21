@@ -56,12 +56,10 @@ extension Weather {
     struct Day: Codable {
         let maxTempC: Double
         let minTempC: Double
-        //let temp: Double
         
         enum CodingKeys: String, CodingKey {
             case maxTempC = "maxtemp_c"
             case minTempC = "mintemp_c"
-            //case temp = "avgtemp_c"
         }
     }
 }

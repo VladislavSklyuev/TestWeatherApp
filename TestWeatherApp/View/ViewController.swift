@@ -80,6 +80,7 @@ class WeatherViewController: UIViewController {
                     self.errorLabel.text = error.localizedDescription
                     self.errorLabel.isHidden = false
                     self.retryButton.isHidden = false
+                    self.statusLabel.isHidden = true
                 } else {
                     self.errorLabel.isHidden = true
                     self.retryButton.isHidden = true
@@ -157,7 +158,6 @@ class WeatherViewController: UIViewController {
                                                   maxAndMinimumTempValues])
         vStack.axis = .vertical
         vStack.spacing = 12
-        vStack.alignment = .center
         vStack.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(vStack)
@@ -302,7 +302,6 @@ extension WeatherViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         return cell
     }
-    
 }
 
 // MARK: - UITableViewDelegate
