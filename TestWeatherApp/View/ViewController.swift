@@ -146,7 +146,7 @@ class WeatherViewController: UIViewController {
         cityNameLabel.text = weather.location.name
         currentTempLabel.text = String(Int(weather.current.tempC))
         shortDescWeather.text = weather.current.condition.text
-        maxAndMinimumTempValues.text = String("Макс.: \(Int(weather.forecast.forecastday[0].day.maxTempC)), мин.: \(Int(weather.forecast.forecastday[0].day.minTempC))")
+        maxAndMinimumTempValues.text = String("Макс.: \(Int(weather.forecast.forecastday.first?.day.maxTempC ?? 0)), мин.: \(Int(weather.forecast.forecastday.first?.day.minTempC ?? 0))")
     }
     
     // MARK: - Настройка скролла
@@ -297,7 +297,7 @@ extension WeatherViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configureCell(text: "\(viewModel.getDayOfWeek(from: viewModel.weather!.forecast.forecastday[indexPath.row].date) ?? "") мин.: \(Int(viewModel.weather!.forecast.forecastday[indexPath.row].day.minTempC)), макс.: \(Int(viewModel.weather!.forecast.forecastday[indexPath.row].day.maxTempC))")
+        cell.configureCell(text: viewModel.getDayOfWeek(from: viewModel.weather!.forecast.forecastday[indexPath.row].date) ?? "", minTemp: viewModel.weather!.forecast.forecastday[indexPath.row].day.minTempC, maxTemp: viewModel.weather!.forecast.forecastday[indexPath.row].day.maxTempC)
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
         return cell
