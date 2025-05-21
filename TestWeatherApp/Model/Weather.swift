@@ -56,27 +56,10 @@ extension Weather {
     struct Day: Codable {
         let maxTempC: Double
         let minTempC: Double
-        //let temp: Double
         
         enum CodingKeys: String, CodingKey {
             case maxTempC = "maxtemp_c"
             case minTempC = "mintemp_c"
-            //case temp = "avgtemp_c"
         }
-    }
-}
-
-extension Weather {
-    static var mock: Weather {
-        Weather(location: Location(name: "Москва"),
-                current:
-                    Current(tempC: 24,
-                            condition: Condition(text: "Ясно")),
-                forecast: Forecast(forecastday: [Forecastday(date: String(describing: Date.now),
-                                                             day: Day(maxTempC: 20,
-                                                                      minTempC: 11),
-                                                             hours: [Hours(time: String(describing: Date.now),
-                                                                           tempC: 11,
-                                                                           condition: Condition(text: "Ясно"))])]))
     }
 }
