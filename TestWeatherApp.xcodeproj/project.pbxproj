@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		652CB2FA2DDE1B2900E72330 /* CoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652CB2F92DDE1B2900E72330 /* CoreLocation.swift */; };
 		65A2E15F2DDE147B0067B788 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65A2E15E2DDE147B0067B788 /* Assets.xcassets */; };
 		65A2E1622DDE147B0067B788 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65A2E1602DDE147B0067B788 /* LaunchScreen.storyboard */; };
 		65A2E16A2DDE15310067B788 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A2E1692DDE15310067B788 /* AppDelegate.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		652CB2F92DDE1B2900E72330 /* CoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreLocation.swift; sourceTree = "<group>"; };
 		65A2E1522DDE14780067B788 /* TestWeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestWeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65A2E15E2DDE147B0067B788 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		65A2E1612DDE147B0067B788 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 			children = (
 				65A2E1692DDE15310067B788 /* AppDelegate.swift */,
 				65A2E16B2DDE15370067B788 /* SceneDelegate.swift */,
+				652CB2F92DDE1B2900E72330 /* CoreLocation.swift */,
 				65A2E17F2DDE159E0067B788 /* Model */,
 				65A2E1802DDE15AB0067B788 /* View */,
 				65A2E1852DDE17050067B788 /* ViewModel */,
@@ -226,6 +229,7 @@
 				65A2E1702DDE15470067B788 /* ViewController.swift in Sources */,
 				65A2E16C2DDE15370067B788 /* SceneDelegate.swift in Sources */,
 				65A2E1762DDE15570067B788 /* WeatherService.swift in Sources */,
+				652CB2FA2DDE1B2900E72330 /* CoreLocation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
