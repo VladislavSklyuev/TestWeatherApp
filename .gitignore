@@ -1,0 +1,35 @@
+# Xcode
+.DS_Store
+*.xcuserstate
+xcuserdata/
+DerivedData/
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Swift Package Manager
+.build/
+Packages/
+*.xcodeproj
+*.xcworkspace
+
+# SwiftLint
+.swiftlint.yml
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+
+# Environment files
+.env
+.env.local
+
+# macOS системные файлы
+.DS_Store
