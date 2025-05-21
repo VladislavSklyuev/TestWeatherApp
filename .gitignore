@@ -31,5 +31,9 @@ fastlane/screenshots
 .env
 .env.local
 
+# Xcode user settings
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcuserstate
+
 # macOS системные файлы
 .DS_Store
